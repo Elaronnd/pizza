@@ -1,0 +1,1 @@
+from app.database.sqlite_pizza import pizzas_class
