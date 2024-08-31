@@ -17,4 +17,4 @@ async def index():
 
 
 if __name__ == "__main__":
-    raise "Please, start main.py"
+    raise "Please, start __init__.py"
