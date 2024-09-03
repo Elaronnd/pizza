@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/view_tables.css') }}">
+</head>
+<body>
+<table style="width:100%">
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>phone_number</th>
+        <th>location</th>
+        <th>order_date</th>
+        <th>complete_order</th>
+    </tr>
+    {% for info in data %}
+    <tr>
+        <td>{{ info[0] }}</td>
+        <td>{{ info[1] }}</td>
+        <td>{{ info[2] }}</td>
+        <td>{{ info[3] }}</td>
+        <td>{{ info[4] }}</td>
+        <td>{{ info[5] }}</td>
+        <td>{{ info[6] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

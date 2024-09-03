@@ -1,5 +1,6 @@
 import aiosqlite
 from datetime import datetime
+from app.hash import hash_data
 from app.debugs.change_logger import logger
 
 
@@ -14,8 +15,9 @@ class Pizzas_Sqlite:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 phone_number INTEGER,
+                location TEXT NOT NULL,
                 order_date datetime,
-                complete_order INTEGER);
+                complete_order TEXT NOT NULL);
             """)
 
             await self.connection.execute("""
@@ -27,21 +29,12 @@ class Pizzas_Sqlite:
                 description TEXT NOT NULL);
             """)
 
-            await self.connection.commit()
-
-            pizzas_data = [
-                (0, "Margarita", 0, 300,
-                 "Піца “Маргарита” — це класична італійська піца, яка складається з простих, але дуже смачних інгредієнтів. Вона була створена в 1889 році неаполітанським піцайоло Рафаелем Еспозіто на честь королеви Італії Маргарити Савойської"),
-                (1, "Pepperoni", 0, 250,
-                 "Піца “Пепероні” - це класична італійська піца, яка отримала свою назву від основного інгредієнта - ковбаси пепероні. Ця піца відрізняється своїм гострим і пікантним смаком, завдяки якому вона стала популярною у всьому світі."),
-                (2, "Four cheese", 0, 300,
-                 "Чотири сири - різновид піци в італійській кухні, яка укомплектована комбінацією чотирьох видів сиру, зазвичай плавлених разом з томатним соусом.")
-            ]
-
-            await self.connection.executemany(
-                'INSERT OR IGNORE INTO list_pizzas (id, name, count_pizzas, price, description) VALUES (?, ?, ?, ?, ?)',
-                pizzas_data
-            )
+            await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY,
+                username TEXT NOT NULL,
+                password TEXT NOT NULL);
+            """)
 
             await self.connection.commit()
 
@@ -50,6 +43,28 @@ class Pizzas_Sqlite:
             return [False, error]
         logger.debug("sqlite| create_db was successful")
         return [True, "complete"]
+
+    async def create_default(self):
+        pizzas_data = [
+            (0, "Margarita", 0, 300,
+             "Піца “Маргарита” — це класична італійська піца, яка складається з простих, але дуже смачних інгредієнтів. Вона була створена в 1889 році неаполітанським піцайоло Рафаелем Еспозіто на честь королеви Італії Маргарити Савойської"),
+            (1, "Pepperoni", 0, 250,
+             "Піца “Пепероні” - це класична італійська піца, яка отримала свою назву від основного інгредієнта - ковбаси пепероні. Ця піца відрізняється своїм гострим і пікантним смаком, завдяки якому вона стала популярною у всьому світі."),
+            (2, "Four cheese", 0, 300,
+             "Чотири сири - різновид піци в італійській кухні, яка укомплектована комбінацією чотирьох видів сиру, зазвичай плавлених разом з томатним соусом.")
+        ]
+
+        await self.connection.executemany(
+            'INSERT OR IGNORE INTO list_pizzas (id, name, count_pizzas, price, description) VALUES (?, ?, ?, ?, ?)',
+            pizzas_data
+        )
+
+        hashed_password = await hash_data("admin")
+
+        await self.connection.execute('INSERT OR IGNORE INTO users (id, username, password) VALUES (?, ?, ?)',
+                                      (0, "admin", hashed_password))
+
+        await self.connection.commit()
 
     async def check_count_pizzas(self, id: int):
         try:
@@ -64,20 +79,93 @@ class Pizzas_Sqlite:
         else:
             return [False, "No pizza found with the given ID"]
 
-    async def add_count_pizzas(self, add_count: int, id: int):
-        count_pizzas = await self.check_count_pizzas(id=id)
-        if not count_pizzas[0]:
-            logger.error("sqlite| Error in add_count_pizzas: check_count_pizzas failed")
-            return count_pizzas
+    async def delete_id_pizzas(self, id: int, table: str):
         try:
-            change_count_pizzas = int(count_pizzas[1]) + add_count
-            await self.connection.execute('UPDATE list_pizzas SET count_pizzas = ? WHERE id = ?', (change_count_pizzas, id))
+            query = f"DELETE FROM {table} WHERE id = ?"
+            logger.debug(f"Executing query: {query} with id: {id}")
+
+            await self.connection.execute(query, (id,))
+            await self.connection.commit()
+
+        except aiosqlite.Error as error:
+            logger.error(f"sqlite| Error in \"delete_id_pizzas\": {error}")
+            return [False, error]
+
+        logger.debug(f"sqlite| \"delete_id_pizzas\" completed successfully")
+        return [True, "completed"]
+
+    async def change_pizzas(self, id: int, name: str = None, phone_number: int = None, location: str = None, order_date: datetime = None, complete_order: str = None):
+        try:
+            if name:
+                await self.connection.execute('UPDATE pizzas SET name = ? WHERE id = ?',
+                                              (name, id))
+            if phone_number:
+                await self.connection.execute('UPDATE pizzas SET phone_number = ? WHERE id = ?',
+                                              (phone_number, id))
+            if location:
+                await self.connection.execute('UPDATE pizzas SET location = ? WHERE id = ?',
+                                              (location, id))
+            if order_date:
+                await self.connection.execute('UPDATE pizzas SET order_date = ? WHERE id = ?',
+                                              (order_date, id))
+            if complete_order:
+                await self.connection.execute('UPDATE pizzas SET complete_order = ? WHERE id = ?',
+                                              (order_date, id))
             await self.connection.commit()
         except aiosqlite.Error as error:
-            logger.error(f"sqlite| Error in add_count_pizzas: {error}")
+            logger.error(f"sqlite| Error in \"change_pizzas\": {error}")
             return [False, error]
-        logger.debug(f"sqlite| add_count_pizzas completed successfully: {change_count_pizzas}")
-        return [True, str(add_count)]
+        logger.debug(f"sqlite| \"change_pizzas\" completed successfully")
+        return [True, "completed"]
+
+    async def change_list_pizzas(self, id: int, name: str = None, count_pizzas: int = None, price: int = None,
+                                 description: str = None):
+        try:
+            if name:
+                await self.connection.execute('UPDATE list_pizzas SET name = ? WHERE id = ?',
+                                              (name, id))
+            if count_pizzas:
+                await self.connection.execute('UPDATE list_pizzas SET count_pizzas = ? WHERE id = ?',
+                                              (count_pizzas, id))
+            if price:
+                await self.connection.execute('UPDATE list_pizzas SET price = ? WHERE id = ?',
+                                              (price, id))
+            if description:
+                await self.connection.execute('UPDATE list_pizzas SET description = ? WHERE id = ?',
+                                              (description, id))
+            await self.connection.commit()
+        except aiosqlite.Error as error:
+            logger.error(f"sqlite| Error in \"change_list_pizzas\": {error}")
+            return [False, error]
+        logger.debug(f"sqlite| \"change_list_pizzas\" completed successfully")
+        return [True, "completed"]
+
+    async def add_pizzas(self, id: int, name: str, phone_number: int, location: str, complete_order: str):
+        try:
+            await self.connection.execute(
+                'INSERT OR IGNORE INTO pizzas (id, name, phone_number, location, order_date, complete_order) VALUES (?, ?, ?, ?, ?, ?)',
+                (id, name, phone_number, location, datetime.now(), complete_order)
+            )
+            await self.connection.commit()
+        except aiosqlite.Error as error:
+            logger.error(f"sqlite| Error in \"add_pizzas\": {error}")
+            return [False, error]
+        logger.debug(f"sqlite| \"add_pizzas\" completed successfully")
+        return [True, "completed"]
+
+    async def add_list_pizzas(self, id: int, name: str = None, count_pizzas: int = None, price: int = None,
+                                 description: str = None):
+        try:
+            await self.connection.execute(
+                'INSERT OR IGNORE INTO list_pizzas (id, name, count_pizzas, price, description) VALUES (?, ?, ?, ?, ?)',
+                (id, name, count_pizzas, price, description)
+            )
+            await self.connection.commit()
+        except aiosqlite.Error as error:
+            logger.error(f"sqlite| Error in \"add_list_pizzas\": {error}")
+            return [False, error]
+        logger.debug(f"sqlite| \"add_list_pizzas\" completed successfully")
+        return [True, "completed"]
 
     async def check_price_pizzas(self, id: int):
         try:
@@ -134,7 +222,7 @@ class Pizzas_Sqlite:
             order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             await self.connection.execute(
                 '''INSERT INTO pizzas (id, name, phone_number, order_date, complete_order) VALUES (?, ?, ?, ?, ?)''',
-                (id, name, phone_number, order_date, 0)
+                (id, name, phone_number, order_date, "False")
             )
             await self.connection.commit()
             remove_pizzas = await self.remove_count_pizzas(remove_count=1, id=id)
@@ -149,7 +237,7 @@ class Pizzas_Sqlite:
 
     async def complete_order_pizza(self, id: int):
         try:
-            await self.connection.execute('UPDATE pizzas SET complete_order = ? WHERE id = ?', (1, id))
+            await self.connection.execute('UPDATE pizzas SET complete_order = ? WHERE id = ?', ("True", id))
             logger.debug(f"sqlite| execute in function \"complete_order_pizza\"\nid = {id}")
             await self.connection.commit()
             logger.debug("sqlite| commit from function \"complete_order_pizza\"")
@@ -171,19 +259,50 @@ class Pizzas_Sqlite:
         await cursor.close()
         return [True, rows]
 
+    async def check_username(self, username: str):
+        try:
+            cursor = await self.connection.execute("SELECT * FROM users WHERE username = ?", (username,))
+            logger.debug(f"sqlite| execute in function \"check_all_table\"\nusername = {username}")
+            results = await cursor.fetchone()
+        except aiosqlite.Error as error:
+            logger.error(f"sqlite| error in function \"check_username\"\n error: {error}")
+            return [False, error]
+        logger.debug("sqlite| function \"check_username\" was complete")
+        await cursor.close()
+        if results:
+            return [True, results]
+        return [False, "User is not found"]
+
+    async def check_password(self, username: str, password: str):
+        exist_username = await self.check_username(username=username)
+        if exist_username[0] is False:
+            logger.error(f"sqlite| Error in \"check_password\": \"check_username\" failed\nerror: {exist_username[1]}")
+            return exist_username
+        try:
+            cursor = await self.connection.execute("SELECT password FROM users WHERE username = ?", (username,))
+        except aiosqlite.Error as error:
+            logger.error(f"sqlite| error in function \"check_password\"\n error: {error}")
+            return [False, error]
+        result = await cursor.fetchone()
+        password_user = result[0]
+        hash_password = await hash_data(password)
+        await cursor.close()
+        if password_user == hash_password:
+            return [True, hash_password]
+        return [False, hash_password]
+
 
 async def sqlite():
     try:
-        sqlite_connection = await aiosqlite.connect(database="app\\database\\pizza_python.db", timeout=30, check_same_thread=False)
+        sqlite_connection = await aiosqlite.connect(database="app\\database\\pizza_python.db", timeout=30,
+                                                    check_same_thread=False)
         logger.debug("sqlite| connected to sqlite database")
         pizzas_class = Pizzas_Sqlite(connection=sqlite_connection)
-        await pizzas_class.create_db()
     except aiosqlite.Error as error:
         logger.error(f"sqlite| error in function \"sqlite\"\n error: {error}")
         return [False, error]
     logger.debug("sqlite| function \"sqlite\" was complete")
     return [True, pizzas_class]
 
-
 if __name__ == "__main__":
-    raise "Please, start __init__.py"
+    raise "Please, start main_flask.py"
