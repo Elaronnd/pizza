@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/auth.css') }}">
+{% endblock header %}
+
+{% block content %}
+
+    <div class="container">
+        {% if error %}
+        <div class="error">
+            <h1>{{ error }}</h1>
+        </div>
+        {% endif %}
+        <form method="POST">
+            <label>Ім'я користувача</label>
+            <input type="text" name="username" placeholder="Введіть ім'я користувача" required>
+
+            <label>Пароль</label>
+            <input type="password" name="password" placeholder="Введіть пароль" required>
+            <input type="submit" value="Увійти в систему">
+        </form>
+        <div class="another-auth">
+            <p>Немаєте облікового запису? <a href="{{ url_for('register') }}">Зарегеструватися</a></p>
+        </div>
+    </div>
+{% endblock content %}

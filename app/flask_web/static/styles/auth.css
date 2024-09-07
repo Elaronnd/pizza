@@ -1,0 +1,74 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+.error h1{
+    color: red;
+    font-size: 16px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.another-auth {
+    text-align: center;
+    margin-top: 20px;
+}
+.another-auth p {
+    margin: 0;
+}
+.another-auth a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+.another-auth a:hover {
+    text-decoration: underline;
+}

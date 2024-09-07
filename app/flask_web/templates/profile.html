@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block header %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/profile.css') }}">
+  <script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}" defer></script>
+{% endblock header %}
+{% block content %}
+    <div class="profile-container">
+        <h1>Ласкаво просимо, {{ username[1] }}</h1>
+        <div class="profile-content">
+            <section class="orders-section">
+                <h2>Ваші замовлення:</h2>
+                {% if orders %}
+                <ul class="orders-list">
+                    {% for order in orders %}
+                    <li class="order-item">Заказ #{{ loop.index }}: {{ order[3] }} x{{ order[5] }} - {{ order[6] }} грн</li>
+                    {% if order[9] == 1 %}
+                    <li class="not-ready">Піца ще готується</li>
+                    {% elif order[9] == 2 %}
+                    <li class="ready">Кур'є вже прямує до вас</li>
+                    {% elif order[9] == 3 %}
+                    <li class="tasty">Ви вже насолоджуєтись піцею :)</li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+                {% else %}
+                    <p>У вас немає замовлень.</p>
+                {% endif %}
+            </section>
+
+            <section class="account-actions">
+                <a href="{{ url_for('logout') }}" class="btn">Вийти з аккаунту</a>
+                <div class="delete-account-container">
+                    <a href="{{ url_for('delete_account') }}" id="delete-account" class="btn btn-danger disabled" onclick="return confirmDelete()">Видалити аккаунт</a>
+                    <div class="delete-account-checkbox">
+                        <label>
+                            <input type="checkbox" id="confirm-checkbox">
+                            Підтвердити видалення аккаунту
+                        </label>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}

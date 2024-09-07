@@ -1,0 +1,200 @@
+/* Общие стили страницы */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    padding-top: 60px; /* Adjust based on the navbar height */
+}
+
+.navbar {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;
+}
+
+.navbar-logo {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.navbar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-item {
+    margin: 0;
+}
+
+.navbar-link {
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.navbar-link:hover {
+    color: #0056b3;
+}
+
+.navbar-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #fff;
+    background-color: #007BFF;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    text-align: center;
+    box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn.disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Red background for danger actions */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+/* Стили для контейнера профиля */
+.profile-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.profile-container h1 {
+    margin: 0 0 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Стили для секции заказов */
+.orders-section {
+    background: #f9f9f9; /* Светлый фон для секции */
+    border: 1px solid #ddd; /* Граница вокруг секции */
+    border-radius: 8px; /* Закругленные углы */
+    padding: 20px; /* Отступы внутри секции */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Легкая тень для выделения */
+}
+
+.orders-section h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px; /* Отступ снизу заголовка */
+    border-bottom: 2px solid #007BFF; /* Подчеркивание заголовка */
+    padding-bottom: 10px; /* Отступ снизу заголовка */
+}
+
+.orders-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-item {
+    background: #fff; /* Белый фон для каждого элемента списка */
+    border: 1px solid #ddd; /* Легкая граница вокруг элементов */
+    border-radius: 8px; /* Закругленные углы */
+    padding: 10px 15px; /* Отступы внутри элемента списка */
+    margin-bottom: 10px; /* Отступ снизу каждого элемента */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Легкая тень для элементов списка */
+    font-size: 14px; /* Размер шрифта */
+    color: #555; /* Цвет текста */
+}
+
+.order-item:last-child {
+    margin-bottom: 0; /* Удаление отступа снизу у последнего элемента */
+}
+
+/* CSS для классов статусов заказа */
+.not-ready {
+    color: #fff; /* Белый текст для лучшего контраста */
+    background-color: #dc3545; /* Красный фон */
+    padding: 8px 12px; /* Отступы для лучшего восприятия */
+    border-radius: 4px; /* Закругленные углы */
+    font-size: 14px; /* Размер шрифта */
+    margin-bottom: 10px; /* Отступ снизу */
+}
+
+.ready {
+    color: #333; /* Темный текст для лучшего контраста */
+    background-color: #ffc107; /* Желтый фон */
+    padding: 8px 12px; /* Отступы для лучшего восприятия */
+    border-radius: 4px; /* Закругленные углы */
+    font-size: 14px; /* Размер шрифта */
+    margin-bottom: 10px; /* Отступ снизу */
+}
+
+.tasty {
+    color: #fff; /* Белый текст для лучшего контраста */
+    background-color: #28a745; /* Зеленый фон */
+    padding: 8px 12px; /* Отступы для лучшего восприятия */
+    border-radius: 4px; /* Закругленные углы */
+    font-size: 14px; /* Размер шрифта */
+    margin-bottom: 10px; /* Отступ снизу */
+}
+
+/* Стили для действий аккаунта */
+.account-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.delete-account-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.delete-account-checkbox {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.delete-account-checkbox input[type="checkbox"] {
+    margin-right: 10px;
+}

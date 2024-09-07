@@ -1,5 +1,4 @@
-import asyncio
-from app.database.sqlite_pizza import sqlite
+from asyncio import run as run_async
 from app.flask_web.main_flask import web
 
 
@@ -9,10 +8,7 @@ async def main():
         port=5000,
         debug=True,
     )
-    pizzas_class = await sqlite()
-    await pizzas_class[1].create_db()
-    await pizzas_class[1].create_default()
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    run_async(main())
