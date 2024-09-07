@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Змінити дані користувача</h1>
+<form method="POST">
+    <label>id користувача</label>
+    <input type="number" name="id" placeholder="Введіть id користувача" required> <br/>
+    <label>юзернейм користувача</label>
+    <input type="text" name="username" placeholder="Введіть юзернейм користувача"> <br/>
+    <label>пароль користувача</label>
+    <input type="password" name="password" placeholder="Введіть пароль користувача"> <br/>
+    <label>чи це адміністратор?</label>
+        <select name="admin" id="admin">
+        <option value="False">Ні</option>
+        <option value="True">Так</option>
+    </select> <br/>
+    <input type="submit" value="submit">
+</form>
+</body>
+</html>

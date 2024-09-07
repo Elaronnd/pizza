@@ -10,29 +10,19 @@
     <tr>
         <th>id</th>
         <th>username</th>
-        <th>name</th>
-        <th>name_pizza</th>
-        <th>phone_number</th>
-        <th>count</th>
-        <th>price</th>
-        <th>location</th>
-        <th>order_date</th>
-        <th>complete_order</th>
+        <th>password</th>
+        <th>admin</th>
+        <th>cookie</th>
     </tr>
     {% for info in data %}
     <tr>
         <td>{{ info[0] }}</td>
         <td>{{ info[1] }}</td>
         <td>{{ info[2] }}</td>
-        <td>{{ info[3] }}</td>
-        <td>{{ info[4] }}</td>
-        <td>{{ info[5] }}</td>
-        <td>{{ info[6] }}</td>
-        <td>{{ info[7] }}</td>
-        <td>{{ info[8] }}</td>
         <td>
-            <input type="checkbox" disabled {{ 'checked' if info[9] == "2" or info[9] == "3" else '' }}>
+            <input type="checkbox" disabled {{ 'checked' if info[3] == "1" else '' }}>
         </td>
+        <td>{{ info[4] }}</td>
     </tr>
     {% endfor %}
 </table>

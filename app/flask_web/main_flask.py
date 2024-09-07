@@ -62,6 +62,13 @@ async def view_orders():
     info_pizzas = await pizzas_class[1].check_all_table(table="pizzas")
     return render_template(template_name_or_list="view_orders.html", data=info_pizzas[1])
 
+@web.route(rule="/admin/view-users")
+@auth_admin.login_required
+async def view_users():
+    pizzas_class = await sqlite()
+    info_pizzas = await pizzas_class[1].check_all_table(table="users")
+    return render_template(template_name_or_list="view_users.html", data=info_pizzas[1])
+
 
 @web.route(rule="/admin/edit-pizzas", methods=["GET", "POST"])
 @auth_admin.login_required
@@ -98,30 +105,57 @@ async def edit_orders():
         return redirect(url_for("edit_orders"))
     return redirect(url_for("admin"))
 
+@web.route(rule="/admin/edit-users", methods=["GET", "POST"])
+@auth_admin.login_required
+async def edit_users():
+    if request.method == "GET":
+        return render_template(template_name_or_list="edit_users.html")
+    id_user = request.form["id"]
+    username = request.form["username"]
+    password = request.form["password"]
+    admin_user = request.form["admin"]
+    pizzas_class = await sqlite()
+    edit_user = await pizzas_class[1].change_user(id=id_user, username=username.lower(), password=password.lower(), admin=bool(admin_user))
+    if edit_user[0] is False:
+        return redirect(url_for("edit_users"))
+    return redirect(url_for("admin"))
+
 
 @web.route(rule="/admin/delete-orders", methods=["GET", "POST"])
 @auth_admin.login_required
 async def delete_orders():
     if request.method == "GET":
-        return render_template(template_name_or_list="delete_orders.html")
+        return render_template(template_name_or_list="delete.html", table="замовлення")
     order_id = request.form["id"]
     pizzas_class = await sqlite()
-    delete_pizza = await pizzas_class[1].delete_id_pizzas(id=order_id, table="pizzas")
+    delete_pizza = await pizzas_class[1].delete_by_id_table(id=order_id, table="pizzas")
     if delete_pizza[0] is False:
         return redirect(url_for("delete_orders"))
     return redirect(url_for("admin"))
 
 
-@web.route(rule="/admin/delete_pizzas", methods=["GET", "POST"])
+@web.route(rule="/admin/delete-pizzas", methods=["GET", "POST"])
 @auth_admin.login_required
 async def delete_pizzas():
     if request.method == "GET":
-        return render_template(template_name_or_list="delete_pizzas.html")
+        return render_template(template_name_or_list="delete.html", table="піц")
     pizza_id = request.form["id"]
     pizzas_class = await sqlite()
-    delete_pizza = await pizzas_class[1].delete_id_pizzas(id=pizza_id, table="list_pizzas")
+    delete_pizza = await pizzas_class[1].delete_by_id_table(id=pizza_id, table="list_pizzas")
     if delete_pizza[0] is False:
         return redirect(url_for("delete_pizzas"))
+    return redirect(url_for("admin"))
+
+@web.route(rule="/admin/delete-users", methods=["GET", "POST"])
+@auth_admin.login_required
+async def delete_users():
+    if request.method == "GET":
+        return render_template(template_name_or_list="delete.html", table="юзерів")
+    user_id = request.form["id"]
+    pizzas_class = await sqlite()
+    delete_pizza = await pizzas_class[1].delete_by_id_table(id=user_id, table="users")
+    if delete_pizza[0] is False:
+        return redirect(url_for("delete_users"))
     return redirect(url_for("admin"))
 
 
@@ -143,7 +177,6 @@ async def add_orders():
     add_pizza = await pizzas_class[1].order_pizza(id=order_id, username=username, name=order_name, name_pizza=name_pizza, phone_number=int(order_phone_number),
                                                     count=int(count), price=int(price), location=order_location, complete_order=bool(order_complete_order))
     if add_pizza[0] is False:
-        logger.debug(f"teest/ {add_pizza}")
         return redirect(url_for("add_orders"))
     return redirect(url_for("admin"))
 
@@ -165,6 +198,19 @@ async def add_pizzas():
         return redirect(url_for("add_pizzas"))
     return redirect(url_for("admin"))
 
+@web.route(rule="/admin/add-users", methods=["GET", "POST"])
+@auth_admin.login_required
+async def add_users():
+    if request.method == "GET":
+        return render_template(template_name_or_list="add_users.html")
+    username = request.form["username"]
+    password = request.form["password"]
+    admin_user = request.form["admin"]
+    pizzas_class = await sqlite()
+    add_user = await pizzas_class[1].create_account(username=username.lower(), password=password.lower(), admin=bool(admin_user))
+    if add_user[0] is False:
+        return redirect(url_for("add_users"))
+    return redirect(url_for("admin"))
 
 @web.route(rule="/register", methods=["GET", "POST"])
 async def register():
@@ -183,8 +229,10 @@ async def register():
     password_reply = request.form["password_reply"]
     if username and password and password_reply is None:
         return redirect(url_for(endpoint="register", error="Some parameters are none"))
+    elif username != password_reply:
+        redirect(url_for(endpoint="register", error="Reply password is not password"))
     pizzas_class = await sqlite()
-    create_account = await pizzas_class[1].create_account(username=username, password=password, reply_password=password_reply)
+    create_account = await pizzas_class[1].create_account(username=username, password=password)
     if create_account[0] is False:
         return redirect(url_for(endpoint="register", error=create_account[1]))
     resp = make_response(redirect(url_for("index")))

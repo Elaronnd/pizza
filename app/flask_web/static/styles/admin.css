@@ -4,6 +4,7 @@ body {
 	margin: 0;
 	padding: 20px;
 }
+
 .container {
 	max-width: 800px;
 	margin: auto;
@@ -12,15 +13,18 @@ body {
 	border-radius: 8px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 h1 {
 	text-align: center;
 	margin-bottom: 20px;
 }
+
 .button-group {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
 }
+
 .button-group button {
 	background-color: #007bff;
 	color: white;
@@ -31,6 +35,16 @@ h1 {
 	cursor: pointer;
 	transition: background-color 0.3s ease;
 }
+
 .button-group button:hover {
 	background-color: #0056b3;
+}
+
+/* New styles for danger buttons */
+.button-group .btn-danger {
+	background-color: #dc3545; /* Red background for danger actions */
+}
+
+.button-group .btn-danger:hover {
+	background-color: #c82333; /* Darker red on hover */
 }
