@@ -26,8 +26,8 @@ async def delete_users():
     pizzas_class = await sqlite()
     delete_pizza = await pizzas_class[1].delete_by_id_table(id=user_id, table="users")
     if delete_pizza[0] is False:
-        return redirect(url_for("delete_users"))
-    return redirect(url_for("admin"))
+        return redirect(url_for("admin.delete_users"))
+    return redirect(url_for("admin.admin"))
 
 
 @admin_bp.route(rule="/admin/add-orders", methods=["GET", "POST"])
@@ -48,8 +48,8 @@ async def add_orders():
     add_pizza = await pizzas_class[1].order_pizza(id=order_id, username=username, name=order_name, name_pizza=name_pizza, phone_number=int(order_phone_number),
                                                     count=int(count), price=int(price), location=order_location, complete_order=bool(order_complete_order))
     if add_pizza[0] is False:
-        return redirect(url_for("add_orders"))
-    return redirect(url_for("admin"))
+        return redirect(url_for("admin.add_orders"))
+    return redirect(url_for("admin.admin"))
 
 
 @admin_bp.route(rule="/admin/add-pizzas", methods=["GET", "POST"])
@@ -66,8 +66,8 @@ async def add_pizzas():
     change_pizza = await pizzas_class[1].add_list_pizzas(id=pizza_id, name=pizza_name, count_pizzas=count_pizzas,
                                                             price=pizza_price, description=pizza_description)
     if change_pizza[0] is False:
-        return redirect(url_for("add_pizzas"))
-    return redirect(url_for("admin"))
+        return redirect(url_for("admin.add_pizzas"))
+    return redirect(url_for("admin.admin"))
 
 
 @admin_bp.route(rule="/admin/add-users", methods=["GET", "POST"])
@@ -81,8 +81,8 @@ async def add_users():
     pizzas_class = await sqlite()
     add_user = await pizzas_class[1].create_account(username=username.lower(), password=password.lower(), admin=bool(admin_user))
     if add_user[0] is False:
-        return redirect(url_for("add_users"))
-    return redirect(url_for("admin"))
+        return redirect(url_for("admin.add_users"))
+    return redirect(url_for("admin.admin"))
 
 @admin_bp.route(rule="/admin", methods=["GET"])
 @auth_admin.login_required
@@ -128,8 +128,8 @@ async def edit_pizzas():
     change_pizza = await pizzas_class[1].change_list_pizzas(id=pizza_id, name=pizza_name, count_pizzas=count_pizzas,
                                                             price=pizza_price, description=pizza_description)
     if change_pizza[0] is False:
-        return redirect(url_for("edit_pizzas"))
-    return redirect(url_for("admin"))
+        return redirect(url_for("admin.edit_pizzas"))
+    return redirect(url_for("admin.admin"))
 
 
 @admin_bp.route(rule="/admin/edit-orders", methods=["GET", "POST"])
@@ -146,8 +146,8 @@ async def edit_orders():
     change_pizza = await pizzas_class[1].change_pizzas(id=order_id, name=order_name, phone_number=order_phone_number,
                                                        price=order_price, complete_order=order_complete_order)
     if change_pizza[0] is False:
-        return redirect(url_for("edit_orders"))
-    return redirect(url_for("admin"))
+        return redirect(url_for("admin.edit_orders"))
+    return redirect(url_for("admin.admin"))
 
 
 @admin_bp.route(rule="/admin/edit-users", methods=["GET", "POST"])
@@ -162,8 +162,8 @@ async def edit_users():
     pizzas_class = await sqlite()
     edit_user = await pizzas_class[1].change_user(id=id_user, username=username.lower(), password=password.lower(), admin=bool(admin_user))
     if edit_user[0] is False:
-        return redirect(url_for("edit_users"))
-    return redirect(url_for("admin"))
+        return redirect(url_for("admin.edit_users"))
+    return redirect(url_for("admin.admin"))
 
 
 @admin_bp.route(rule="/admin/delete-orders", methods=["GET", "POST"])
@@ -175,8 +175,8 @@ async def delete_orders():
     pizzas_class = await sqlite()
     delete_pizza = await pizzas_class[1].delete_by_id_table(id=order_id, table="pizzas")
     if delete_pizza[0] is False:
-        return redirect(url_for("delete_orders"))
-    return redirect(url_for("admin"))
+        return redirect(url_for("admin.delete_orders"))
+    return redirect(url_for("admin.admin"))
 
 
 @admin_bp.route(rule="/admin/delete-pizzas", methods=["GET", "POST"])
@@ -188,5 +188,5 @@ async def delete_pizzas():
     pizzas_class = await sqlite()
     delete_pizza = await pizzas_class[1].delete_by_id_table(id=pizza_id, table="list_pizzas")
     if delete_pizza[0] is False:
-        return redirect(url_for("delete_pizzas"))
-    return redirect(url_for("admin"))
+        return redirect(url_for("admin.delete_pizzas"))
+    return redirect(url_for("admin.admin"))

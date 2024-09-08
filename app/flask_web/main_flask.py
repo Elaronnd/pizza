@@ -47,7 +47,7 @@ async def register():
     password_reply = request.form["password_reply"]
     if username and password and password_reply is None:
         return redirect(url_for(endpoint="register", error="Some parameters are none"))
-    elif username != password_reply:
+    elif password != password_reply:
         redirect(url_for(endpoint="register", error="Reply password is not password"))
     pizzas_class = await sqlite()
     create_account = await pizzas_class[1].create_account(username=username, password=password)
