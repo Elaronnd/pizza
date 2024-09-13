@@ -3,7 +3,6 @@ from app.debugs.change_logger import logger
 from app.database.sqlite_pizza import sqlite
 from flask_httpauth import HTTPBasicAuth
 
-
 auth_admin = HTTPBasicAuth()
 admin_bp = Blueprint("admin", __name__)
 
@@ -17,7 +16,7 @@ async def verify_pass_admin(username: str, password: str):
         logger.debug("sqlite| someone login into admin page.")
         return [True, username.lower()]
 
-@admin_bp.route(rule="/admin/delete-users", methods=["GET", "POST"])
+@admin_bp.route(rule="/admin/delete-users", methods=["GET", "POST"], strict_slashes=False)
 @auth_admin.login_required
 async def delete_users():
     if request.method == "GET":
@@ -30,7 +29,7 @@ async def delete_users():
     return redirect(url_for("admin.admin"))
 
 
-@admin_bp.route(rule="/admin/add-orders", methods=["GET", "POST"])
+@admin_bp.route(rule="/admin/add-orders", methods=["GET", "POST"], strict_slashes=False)
 @auth_admin.login_required
 async def add_orders():
     if request.method == "GET":
@@ -52,7 +51,7 @@ async def add_orders():
     return redirect(url_for("admin.admin"))
 
 
-@admin_bp.route(rule="/admin/add-pizzas", methods=["GET", "POST"])
+@admin_bp.route(rule="/admin/add-pizzas", methods=["GET", "POST"], strict_slashes=False)
 @auth_admin.login_required
 async def add_pizzas():
     if request.method == "GET":
@@ -70,7 +69,7 @@ async def add_pizzas():
     return redirect(url_for("admin.admin"))
 
 
-@admin_bp.route(rule="/admin/add-users", methods=["GET", "POST"])
+@admin_bp.route(rule="/admin/add-users", methods=["GET", "POST"], strict_slashes=False)
 @auth_admin.login_required
 async def add_users():
     if request.method == "GET":
@@ -84,13 +83,13 @@ async def add_users():
         return redirect(url_for("admin.add_users"))
     return redirect(url_for("admin.admin"))
 
-@admin_bp.route(rule="/admin", methods=["GET"])
+@admin_bp.route(rule="/admin", methods=["GET"], strict_slashes=False)
 @auth_admin.login_required
 async def admin():
     return render_template(template_name_or_list="admin.html")
 
 
-@admin_bp.route(rule="/admin/view-pizzas", methods=["GET"])
+@admin_bp.route(rule="/admin/view-pizzas", methods=["GET"], strict_slashes=False)
 @auth_admin.login_required
 async def view_pizzas():
     pizzas_class = await sqlite()
@@ -98,7 +97,7 @@ async def view_pizzas():
     return render_template(template_name_or_list="view_pizzas.html", data=info_pizzas[1])
 
 
-@admin_bp.route(rule="/admin/view-orders", methods=["GET"])
+@admin_bp.route(rule="/admin/view-orders", methods=["GET"], strict_slashes=False)
 @auth_admin.login_required
 async def view_orders():
     pizzas_class = await sqlite()
@@ -106,7 +105,7 @@ async def view_orders():
     return render_template(template_name_or_list="view_orders.html", data=info_pizzas[1])
 
 
-@admin_bp.route(rule="/admin/view-users")
+@admin_bp.route(rule="/admin/view-users", strict_slashes=False)
 @auth_admin.login_required
 async def view_users():
     pizzas_class = await sqlite()
@@ -114,7 +113,7 @@ async def view_users():
     return render_template(template_name_or_list="view_users.html", data=info_pizzas[1])
 
 
-@admin_bp.route(rule="/admin/edit-pizzas", methods=["GET", "POST"])
+@admin_bp.route(rule="/admin/edit-pizzas", methods=["GET", "POST"], strict_slashes=False)
 @auth_admin.login_required
 async def edit_pizzas():
     if request.method == "GET":
@@ -132,7 +131,7 @@ async def edit_pizzas():
     return redirect(url_for("admin.admin"))
 
 
-@admin_bp.route(rule="/admin/edit-orders", methods=["GET", "POST"])
+@admin_bp.route(rule="/admin/edit-orders", methods=["GET", "POST"], strict_slashes=False)
 @auth_admin.login_required
 async def edit_orders():
     if request.method == "GET":
@@ -150,7 +149,7 @@ async def edit_orders():
     return redirect(url_for("admin.admin"))
 
 
-@admin_bp.route(rule="/admin/edit-users", methods=["GET", "POST"])
+@admin_bp.route(rule="/admin/edit-users", methods=["GET", "POST"], strict_slashes=False)
 @auth_admin.login_required
 async def edit_users():
     if request.method == "GET":
@@ -166,7 +165,7 @@ async def edit_users():
     return redirect(url_for("admin.admin"))
 
 
-@admin_bp.route(rule="/admin/delete-orders", methods=["GET", "POST"])
+@admin_bp.route(rule="/admin/delete-orders", methods=["GET", "POST"], strict_slashes=False)
 @auth_admin.login_required
 async def delete_orders():
     if request.method == "GET":
@@ -179,7 +178,7 @@ async def delete_orders():
     return redirect(url_for("admin.admin"))
 
 
-@admin_bp.route(rule="/admin/delete-pizzas", methods=["GET", "POST"])
+@admin_bp.route(rule="/admin/delete-pizzas", methods=["GET", "POST"], strict_slashes=False)
 @auth_admin.login_required
 async def delete_pizzas():
     if request.method == "GET":
@@ -190,3 +189,6 @@ async def delete_pizzas():
     if delete_pizza[0] is False:
         return redirect(url_for("admin.delete_pizzas"))
     return redirect(url_for("admin.admin"))
+
+if __name__ == "__main__":
+    raise "Please, start main.py"
