@@ -145,7 +145,7 @@ class Pizzas_Sqlite:
         return [True, "completed"]
 
     async def change_list_pizzas(self, id: int, name: str = None, price: int = None,
-                                 description: str = None):
+                                 description: str = None, count_pizzas: int = None):
         try:
             if name:
                 await self.connection.execute('UPDATE list_pizzas SET name = ? WHERE id = ?',
@@ -156,6 +156,9 @@ class Pizzas_Sqlite:
             if description:
                 await self.connection.execute('UPDATE list_pizzas SET description = ? WHERE id = ?',
                                               (description, id))
+            if count_pizzas:
+                await self.connection.execute('UPDATE list_pizzas SET count_pizzas = ? WHERE id = ?',
+                                              (count_pizzas, id))
             await self.connection.commit()
         except aiosqlite.Error as err:
             logger.error(f"sqlite| Error in \"change_list_pizzas\": {err}")

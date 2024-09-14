@@ -11,22 +11,29 @@
     <nav class="navbar">
         <div class="navbar-logo">MyLogo</div>
         <ul class="navbar-menu">
-            <li class="navbar-item"><a href="{{ url_for('index') }}" class="navbar-link">Головна сторінка</a></li>
+            <li class="navbar-item"><a href="{{ url_for('user.index') }}" class="navbar-link">Головна сторінка</a></li>
         </ul>
         <div class="navbar-buttons">
             {% if login %}
-                <a href="{{ url_for('login') }}" class="btn">Залогінитися</a>
+                <a href="{{ url_for('user.login') }}" class="btn">Залогінитися</a>
             {% endif %}
             {% if register %}
-                <a href="{{ url_for('register') }}" class="btn">Зарегеструватися</a>
+                <a href="{{ url_for('user.register') }}" class="btn">Зарегеструватися</a>
             {% endif %}
             {% if user %}
-                <a href="{{ url_for('profile') }}" class="btn">
+                <a href="{{ url_for('user.profile') }}" class="btn">
                     <img src="{{ url_for('static', filename='assets/Profile.png') }}" style="width: 25px; height: 25px;">
                 </a>
             {% endif %}
         </div>
     </nav>
+    <div class="weather-widget">
+        <img src="{{ url_for('static', filename='assets/weather/' ~ g.icon_weather ~ '.png') }}" alt="Weather Icon" class="weather-icon">
+        <div class="weather-info">
+            <span class="weather-temp">{{ g.temperature_weather }}°C</span>
+            <span class="weather-description">{{ g.description_weather }}</span>
+        </div>
+    </div>
 <div> {% block content %}{% endblock %} </div>
 </body>
 </html>

@@ -11,7 +11,7 @@
         <p>Залишилося: {{ row[2] }}</p>
         <p>Ціна: {{ row[3] }}</p>
         <p>Опис: {{ row[4] }}</p>
-        <a href="/pizza-order?id={{ row[0] }}/" class="btn {% if row[2] == 0 %}disabled{% endif %}" aria-disabled="true">Замовити</a>
+        <a href="{{ url_for('user.pizza_order') }}?id={{ row[0] }}" class="btn {% if row[2] == 0 %}disabled{% endif %}" aria-disabled="true">Замовити</a>
     </div>
 {% endfor %}
 </div>

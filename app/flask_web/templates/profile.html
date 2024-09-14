@@ -28,9 +28,9 @@
             </section>
 
             <section class="account-actions">
-                <a href="{{ url_for('logout') }}" class="btn">Вийти з аккаунту</a>
+                <a href="{{ url_for('user.logout') }}" class="btn">Вийти з аккаунту</a>
                 <div class="delete-account-container">
-                    <a href="{{ url_for('delete_account') }}" id="delete-account" class="btn btn-danger disabled" onclick="return confirmDelete()">Видалити аккаунт</a>
+                    <a href="{{ url_for('user.delete_account') }}" id="delete-account" class="btn btn-danger disabled" onclick="return confirmDelete()">Видалити аккаунт</a>
                     <div class="delete-account-checkbox">
                         <label>
                             <input type="checkbox" id="confirm-checkbox">
